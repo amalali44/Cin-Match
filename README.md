@@ -1,12 +1,14 @@
-# Personalized Recommendation & Analytics Pipeline
+# CinMatch
 
-A MovieLens recommendation project built incrementally with Python, SQL,
-PySpark, scikit-learn, and Docker.
+Personalized movie recommendations and analytics, built on MovieLens.
+The project uses Python, SQL, and PySpark, with scikit-learn models and Docker
+training/inference planned in later milestones.
 
-**Current stage: project foundation.** This repository provides an installable
-Python package, streaming CSV validation, a data profile command, synthetic
-sample data, and CI. ETL, models, evaluation, and containers are planned work.
-No full MovieLens 25M run or recommendation performance is claimed yet.
+**Current stage: PySpark + SQL ETL.** The package validates and profiles ratings,
+quarantines invalid interactions, builds chronological splits and training-only
+features, and writes Parquet datasets with a provenance manifest. Models,
+recommendation evaluation, and Docker remain planned work. No full MovieLens
+25M run or recommendation performance is claimed yet.
 
 ## Quick start
 
@@ -45,14 +47,29 @@ usage terms included in its download. Data and generated artifacts stay out of G
 ## Structure
 
 ```text
-src/recsys/       CLI, data contract, and synthetic fixture
-tests/           Data-contract and command tests
+src/recsys/       CLI, data contracts, Spark ETL, SQL, and synthetic fixtures
+tests/           Unit tests and opt-in Spark integration tests
 docs/roadmap.md   Implementation stages and acceptance checks
 data/raw/        Local downloads (ignored)
 artifacts/       Generated profiles and future models (ignored)
 ```
 
-## Planned pipeline
+## Build ML-ready features
+
+Install Java 17+ and set `JAVA_HOME`, then install the pinned Spark extra:
+
+```sh
+python -m pip install ".[spark]"
+recsys etl --ratings src/recsys/fixtures/ratings.csv --movies src/recsys/fixtures/movies.csv --output artifacts/sample-etl --train-end 1000000060 --validation-end 1000000120 --buckets 2 --master "local[2]"
+```
+
+The sample command is runnable from the repository root. Each run requires a
+**new output directory**. For real data, use `ratings.csv` and `movies.csv` from
+the same MovieLens release and choose explicit Unix timestamp boundaries.
+See [ETL usage and data semantics](docs/etl.md) for output schemas, deduplication,
+cold-start behavior, resource guidance, and integration test commands.
+
+## Pipeline roadmap
 
 ```text
 MovieLens CSV → PySpark + SQL ETL → partitioned Parquet

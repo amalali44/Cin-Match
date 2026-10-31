@@ -2,6 +2,8 @@
 
 Land each milestone in a separate commit when its implementation and checks are
 complete. Commit dates reflect when the work actually occurs.
+Use a separate `codex/` feature branch for each milestone and review its diff
+before committing and pushing. The ETL milestone uses `codex/pyspark-sql-etl`.
 
 ## 1. Project foundation — implemented
 
@@ -10,7 +12,7 @@ complete. Commit dates reflect when the work actually occurs.
 
 Acceptance: installation, sample command, invalid-input checks, and tests pass.
 
-## 2. PySpark + SQL ETL — next
+## 2. PySpark + SQL ETL — implemented and reviewed
 
 - Explicit schemas, invalid-row quarantine, deterministic deduplication.
 - Metadata joins and SQL user/movie feature and genre/popularity aggregations.

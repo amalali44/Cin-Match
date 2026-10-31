@@ -4,11 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "movielens-recsys-pipeline"
-version = "0.1.0"
-description = "Foundation for a personalized MovieLens recommendation and analytics pipeline"
+version = "0.2.0"
+description = "CinMatch: personalized movie recommendation and analytics pipeline"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
+
+[project.optional-dependencies]
+spark = ["pyspark==4.0.1"]
 
 [project.scripts]
 recsys = "recsys.cli:main"
@@ -17,4 +20,4 @@ recsys = "recsys.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-recsys = ["fixtures/*.csv"]
+recsys = ["fixtures/*.csv", "sql/*.sql"]

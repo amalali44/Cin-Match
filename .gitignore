@@ -12,3 +12,7 @@ artifacts/
 .env.*
 !.env.example
 .DS_Store
+spark-warehouse/
+metastore_db/
+derby.log
+hs_err_pid*
