@@ -1,4 +1,4 @@
-name: Foundation checks
+name: CinMatch checks
 
 on:
   push:
@@ -18,3 +18,22 @@ jobs:
       - run: python -m pip install .
       - run: python -m unittest discover -s tests -v
       - run: recsys profile --sample --output artifacts/sample-profile.json
+
+  spark-etl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - run: python -m pip install ".[spark]"
+      - run: python -m unittest discover -s tests -v
+        env:
+          RECSYS_RUN_SPARK_TESTS: "1"
+          SPARK_LOCAL_IP: "127.0.0.1"
+      - run: recsys etl --ratings src/recsys/fixtures/ratings.csv --movies src/recsys/fixtures/movies.csv --output artifacts/sample-etl --train-end 1000000060 --validation-end 1000000120 --buckets 2 --master "local[2]"
