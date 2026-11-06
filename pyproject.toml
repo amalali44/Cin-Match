@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "movielens-recsys-pipeline"
-version = "0.2.0"
+version = "0.3.0"
 description = "CinMatch: personalized movie recommendation and analytics pipeline"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -12,6 +12,7 @@ dependencies = []
 
 [project.optional-dependencies]
 spark = ["pyspark==4.0.1"]
+ml = ["scikit-learn==1.6.1", "pyarrow==20.0.0"]
 
 [project.scripts]
 recsys = "recsys.cli:main"
