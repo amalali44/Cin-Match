@@ -25,7 +25,7 @@ is a correctness check and does not demonstrate full-scale performance.
 
 The driver streams each input through SHA-256 before and after execution.
 Spark reads and transforms the rating data without collecting it into Python;
-only the three split counts return to the driver. Cached frames use
+only summary counts return to the driver. Cached frames use
 `MEMORY_AND_DISK`. Hashing adds two sequential input reads and detects source
 changes before the run is published. Keep source files immutable during a run.
 
@@ -118,7 +118,7 @@ Parquet round-trips, provenance, and output collision protection. CI runs these
 on Ubuntu with Java 17. Native Windows Hadoop filesystem support may require
 additional Hadoop native libraries; Linux is the supported CI runtime.
 
-Local verification also passed all 19 tests on Windows with Python 3.13, Java 17,
+The ETL milestone's local verification passed 19 tests on Windows with Python 3.13, Java 17,
 and the [GlobalMentor Java filesystem adapter](https://github.com/globalmentor/hadoop-bare-naked-local-fs)
 version 0.1.0 on Spark's driver classpath. That adapter was used only for the
 local test runtime and is not a production dependency. The Ubuntu CI job uses

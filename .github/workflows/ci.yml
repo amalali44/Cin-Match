@@ -19,6 +19,22 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: recsys profile --sample --output artifacts/sample-profile.json
 
+  model-baseline:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install ".[ml]"
+      - run: python -m unittest discover -s tests -v
+      - run: recsys demo --output artifacts/model-demo
+      - run: recsys recommend --model artifacts/model-demo/model --user-id 1 --k 3
+      - run: recsys evaluate --data artifacts/model-demo/data --model artifacts/model-demo/model --output artifacts/demo-validation.json
+
   spark-etl:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -31,9 +47,12 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - run: python -m pip install ".[spark]"
+      - run: python -m pip install ".[spark,ml]"
       - run: python -m unittest discover -s tests -v
         env:
           RECSYS_RUN_SPARK_TESTS: "1"
           SPARK_LOCAL_IP: "127.0.0.1"
       - run: recsys etl --ratings src/recsys/fixtures/ratings.csv --movies src/recsys/fixtures/movies.csv --output artifacts/sample-etl --train-end 1000000060 --validation-end 1000000120 --buckets 2 --master "local[2]"
+      - run: recsys train --data artifacts/sample-etl --output artifacts/etl-model --rank 2
+      - run: recsys recommend --model artifacts/etl-model --user-id 1 --k 3
+      - run: recsys evaluate --data artifacts/sample-etl --model artifacts/etl-model --output artifacts/etl-validation.json

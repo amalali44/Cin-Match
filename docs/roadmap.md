@@ -2,8 +2,8 @@
 
 Land each milestone in a separate commit when its implementation and checks are
 complete. Commit dates reflect when the work actually occurs.
-Use a separate `codex/` feature branch for each milestone and review its diff
-before committing and pushing. The ETL milestone uses `codex/pyspark-sql-etl`.
+Use a separate `feature/` branch for each milestone and review its diff before
+committing and pushing. The ETL milestone was merged through `core-features`.
 
 ## 1. Project foundation — implemented
 
@@ -22,20 +22,25 @@ Acceptance: installation, sample command, invalid-input checks, and tests pass.
 Acceptance: integration tests verify deduplication, split isolation, schema,
 partition outputs, and feature statistics without holdout leakage.
 
-## 3. Collaborative filtering
+## 3. Collaborative filtering — local baseline implemented and reviewed
 
-- Small-data scikit-learn baseline and distributed Spark ALS.
-- Fixed seeds, validation tuning, saved models, parameters, and runtime versions.
+- Implemented: bounded scikit-learn SVD baseline, saved factors, parameters,
+  source signatures, runtime versions, and a fixed seed.
+- Implemented: inference with seen-item exclusion and popularity cold-start fallback.
+- Next: distributed Spark ALS and validation-set hyperparameter tuning.
 - Exclude rated items and define cold-start behavior for new users/items.
 
 Acceptance: train/save/reload/infer test and unseen-item checks pass.
 
-## 4. Evaluation and analytics
+## 4. Evaluation and analytics — local metrics implemented and reviewed
 
 - Precision@K and Recall@K with relevance threshold and fixed K.
 - Document candidate universe, macro averaging, and empty-user behavior.
 - RMSE plus prediction coverage to expose cold-start omissions.
 - Record baseline comparisons, split counts, and experiment manifests.
+
+The local SVD/popularity comparison, ranking metrics, fallback/warm RMSE, and
+coverage are implemented. Distributed evaluation and real-data benchmarks remain.
 
 Acceptance: hand-calculated metric fixtures and held-out experiment artifacts.
 
